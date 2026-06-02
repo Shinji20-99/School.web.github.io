@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Dashboard</title>
+
+<style>
+
+body{
+  font-family:Arial;
+  margin:0;
+  background:#f4f6f9;
+}
+
+header{
+  background:#004aad;
+  color:white;
+  padding:20px;
+  text-align:center;
+}
+
+button{
+  padding:10px;
+  margin-top:10px;
+  border:none;
+  background:white;
+  color:#004aad;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+section{
+  padding:20px;
+}
+
+.container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:10px;
+  margin-top:10px;
+}
+
+.card{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+.box{
+  background:white;
+  padding:15px;
+  margin-top:10px;
+  border-radius:10px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+h2{
+  color:#004aad;
+}
+
+
+.back-btn{
+  background:#004aad;
+  color: white;
+  border:1px solid #004aad;
+  padding:10px 15px;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.back-btn:hover{
+  background: blue;
+  color:white;
+} 
+
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Student Dashboard</h1>
+<button class="primary-btn" onclick="logout()">Logout</button>
+</header>
+<section>
+
+<section>
+  <div class="box">
+
+
+<img id="schoolImage"
+style="
+width:102%;
+height:300px;
+object-fit:cover;
+border-radius:10px;
+margin-left:-1%;
+">
+
+  </div>
+</section>
+</section>
+<!-- ================= STUDENTS ================= -->
+<section>
+
+<h2>📊 Students</h2>
+
+<div class="container">
+
+  <div class="card">
+    <h3>Total Students</h3>
+    <p id="total">0</p>
+  </div>
+
+  <div class="card">
+    <h3>Male Students</h3>
+    <p id="male">0</p>
+  </div>
+
+  <div class="card">
+    <h3>Female Students</h3>
+    <p id="female">0</p>
+  </div>
+
+</div>
+
+</section>
+
+<!-- ================= TEACHERS ================= -->
+<section>
+
+<h2>👨‍🏫 Teachers</h2>
+
+<div class="container">
+
+  <div class="card">
+    <h3>Total Teachers</h3>
+    <p id="tTotal">0</p>
+  </div>
+
+  <div class="card">
+    <h3>Male Teachers</h3>
+    <p id="tMale">0</p>
+  </div>
+
+  <div class="card">
+    <h3>Female Teachers</h3>
+    <p id="tFemale">0</p>
+  </div>
+
+</div>
+
+</section>
+
+<!-- ================= EVENTS ================= -->
+<section>
+
+<h2>📢 Announcements</h2>
+<div id="announcements"></div>
+
+<h2>📅 School Events</h2>
+<div id="events"></div>
+
+</section>
+
+<!-- ================= FACILITIES ================= -->
+<section>
+
+<h2>🏫 School Facilities</h2>
+
+<div id="facilityList" class="container"></div>
+
+<div id="facilityModal"
+style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:white;
+z-index:9999;
+padding:20px;
+overflow:auto;
+text-align:center;
+box-sizing:border-box;
+">
+
+<button class="back-btn" onclick="closeFacility()">
+⬅ Back
+</button>
+
+<h2 id="facilityTitle"></h2>
+
+<img id="facilityImage"
+style="
+display:block;
+margin:20px auto;
+max-width:100%;
+max-height:70vh;
+object-fit:contain;
+border-radius:10px;
+">
+</div>
+
+</section>
+
+<script type="module">
+
+import { auth, db } from "./firebase.js";
+import { signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  collection,
+  onSnapshot,
+  doc,
+  query,
+  orderBy,
+  limit
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* ================ SCHOOL IMAGE ================= */
+onSnapshot(doc(db,"settings","school"), (docSnap)=>{
+
+  if(docSnap.exists()){
+
+    document.getElementById("schoolImage").src =
+    docSnap.data().schoolImage;
+
+  }
+
+});
+
+/* ================= STUDENTS  ================= */
+onSnapshot(collection(db,"students"),(snapshot)=>{
+
+  let male = 0;
+  let female = 0;
+
+  snapshot.forEach(doc=>{
+    let d = doc.data();
+
+    if(d.gender === "Male") male++;
+    if(d.gender === "Female") female++;
+  });
+
+  document.getElementById("total").innerText = snapshot.size;
+document.getElementById("male").innerText = male;
+document.getElementById("female").innerText = female;
+
+});
+
+/* ================= TEACHERS  ================= */
+onSnapshot(collection(db,"teachers"),(snapshot)=>{
+
+  let male = 0;
+  let female = 0;
+
+  snapshot.forEach(doc=>{
+    let d = doc.data();
+
+    if(d.gender === "Male") male++;
+    if(d.gender === "Female") female++;
+  });
+
+  document.getElementById("tTotal").innerText = snapshot.size;
+  document.getElementById("tMale").innerText = male;
+  document.getElementById("tFemale").innerText = female;
+
+});
+
+/* ================= EVENTS ================= */
+onSnapshot(collection(db,"announcements"),(snapshot)=>{
+
+  let html = "";
+
+  snapshot.forEach(doc=>{
+
+    let a = doc.data();
+
+    html += `
+      <div class="box">
+
+        ${a.imageUrl ?
+        `<img src="${a.imageUrl}"
+        style="width:100%;max-height:300px;object-fit:cover;border-radius:10px;margin-bottom:10px;">`
+        : ""}
+
+        <p>${a.text}</p>
+
+      </div>
+    `;
+  });
+
+  document.getElementById("announcements").innerHTML = html;
+
+});
+
+
+onSnapshot(collection(db,"events"),(snapshot)=>{
+
+  let html="";
+
+  snapshot.forEach(doc=>{
+    let e = doc.data();
+
+    html += `
+      <div class="box">
+        <h3>${e.title}</h3>
+        <p>${e.date}</p>
+      </div>
+    `;
+  });
+
+  document.getElementById("events").innerHTML = html;
+
+});
+
+/* ================= FACILITIES ================= */
+
+onSnapshot(collection(db,"facilities"),(snapshot)=>{
+document.getElementById("facilityList").addEventListener("click", (e) => {
+
+  const card = e.target.closest(".facility-card");
+  if (!card) return;
+
+  viewFacility(
+    card.dataset.image,
+    card.dataset.name
+  );
+
+});
+  let html = "";
+
+  snapshot.forEach(docSnap=>{
+
+    let f = docSnap.data();
+
+html += `
+  <div class="card facility-card"
+    data-image="${f.imageUrl || ''}"
+    data-name="${f.name || ''}"
+    style="cursor:pointer;">
+
+    🏫
+    <h3>${f.name}</h3>
+
+  </div>
+`;
+
+  });
+
+  document.getElementById("facilityList").innerHTML = html;
+
+});
+
+window.viewFacility = (image, name) => {
+
+  document.getElementById("facilityImage").src =
+    image || "https://via.placeholder.com/500";
+
+  document.getElementById("facilityTitle").innerText = name;
+
+  document.getElementById("facilityModal").style.display = "block";
+};
+
+window.closeFacility = ()=>{
+
+  document.getElementById("facilityModal").style.display = "none";
+
+};
+
+/* ================= LOGOUT ================= */
+window.logout = async ()=>{
+  await signOut(auth);
+  window.location.href="index.html";
+};
+
+</script>
+
+</body>
+</html>
