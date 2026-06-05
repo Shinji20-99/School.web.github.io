@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Website</title>
+
+<style>
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f4f6f9;
+  padding-top:90px;
+}
+
+header{
+  background:darkred;
+  color:white;
+  text-align:center;
+  padding:15px;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  z-index:9999;
+  box-shadow:0 2px 5px rgba(0,0,0,.2);
+}
+
+section{
+  background:white;
+  margin:20px;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 2px 5px rgba(0,0,0,.1);
+}
+
+h2{
+  color:#004aad;
+}
+
+.item{
+  padding:10px;
+  border-bottom:1px solid #ddd;
+}
+
+a{
+  color:#004aad;
+  text-decoration:none;
+}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#666;
+}
+
+.container{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.card{
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 2px 5px rgba(0,0,0,.1);
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <div style="
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  ">
+
+    <img id="schoolLogo"
+    style="
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    object-fit:cover;
+    ">
+
+    <div>
+       <h2 style="margin:0;color:white;">
+        Jose C. Payumo Jr. Memorial High School
+      </h2>
+      <p style="margin:0;">
+        Official School Website
+      </p>
+    </div>
+
+  </div>
+</header>
+<section>
+  <div class="box">
+
+<div class="box">
+
+<img id="schoolImage"
+style="
+width:102%;
+height:300px;
+object-fit:cover;
+border-radius:10px;
+margin-left:-1%;
+">
+
+<h2 style="text-align:center;margin-top:20px;">
+  Welcome to Our School
+</h2>
+<h4 style="text-align:center; margin-top:10px;">
+Jose C Payumo Memorial High School 
+</h4>
+<p style="text-align:center;color:gray;">
+  Empowering students through quality education and excellence.
+</p>
+
+</div>
+  </div>
+</section>
+</section>
+<section>
+  <h2>About School</h2>
+
+  <p>
+    Jose C. Payumo Jr. Memorial High School is a public secondary school located in Barangay Naparing, Dinalupihan, Bataan. Since its establishment, the school has been committed to providing quality education and developing responsible, competent, and lifelong learners.
+  </p>
+    <p>
+    The school offers Junior High School and Senior High School programs, including academic strands such as STEM, HUMSS, and GAS, as well as Technical-Vocational-Livelihood (TVL) specializations. Through dedicated teachers and supportive stakeholders, the school continues to empower students with knowledge, skills, and values necessary for their future success.
+  </p>
+   <p>
+    The school aims to create a safe, inclusive, and learner-centered environment that promotes academic excellence, leadership, and community involvement.
+  </p>
+
+</section>
+
+<section>
+
+<div style="
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+">
+
+  <div>
+    <h2>Mission</h2>
+    <p>
+      To provide accessible, quality, and learner-centered
+      education that develops responsible, competent, and
+      productive learners equipped with knowledge, skills,
+      and values for lifelong success.
+    </p>
+  </div>
+
+  <div>
+    <h2>Vision</h2>
+    <p>
+      A leading educational institution that nurtures
+      academically excellent, socially responsible, and
+      globally competitive learners who contribute
+      positively to society.
+    </p>
+  </div>
+
+</div>
+
+</section>
+
+<section>
+
+<div style="
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+">
+
+  <div style="
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 2px 5px rgba(0,0,0,.1);
+  ">
+    <h2>👨‍🏫 Teachers</h2>
+    <p id="teacherCount">Loading...</p>
+  </div>
+
+  <div style="
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 2px 5px rgba(0,0,0,.1);
+  ">
+    <h2>🎓 Students</h2>
+    <p id="studentCount">Loading...</p>
+  </div>
+
+</div>
+
+</section>
+
+<section>
+  <h2>Facilities</h2>
+
+  <div id="facilities"></div>
+
+  <div id="facilityModal"
+  style="
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:white;
+  z-index:9999;
+  padding:20px;
+  text-align:center;
+  overflow:auto;
+  ">
+
+    <button onclick="closeFacility()">⬅ Back</button>
+
+    <h2 id="facilityTitle"></h2>
+
+    <img id="facilityImage"
+    style="
+    max-width:100%;
+    max-height:70vh;
+    border-radius:10px;
+    ">
+    
+  </div>
+
+</section>
+
+<section>
+  <h2>Announcements</h2>
+
+  <div id="announcements"></div>
+
+</section>
+
+
+<footer>
+
+<div style="
+display:flex;
+justify-content:space-between;
+flex-wrap:wrap;
+gap:20px;
+text-align:left;
+">
+
+  <div>
+    <h3>📍 Contact Information</h3>
+   <p>
+  RCX5+56R<br>
+  Jose C. Payumo Jr.<br>
+  Memorial High School<br>
+  Barangay Naparing<br>
+  Dinalupihan, Bataan, Philippines
+</p>
+  </div>
+
+  <div>
+    <h3>🌐 Connect With Us</h3>
+
+    <p id="contactInfo">
+      Loading...
+    </p>
+
+ <a id="facebookLink"
+target="_blank"
+style="
+display:inline-flex;
+align-items:center;
+gap:10px;
+background:#3b5998;
+color:white;
+padding:6px 12px;
+border-radius:10px;
+text-decoration:none;
+font-size:14px;
+font-weight:bold;
+box-shadow:0 2px 5px rgba(0,0,0,.3);
+">
+
+<img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
+style="
+width:18px;
+height:18px;
+">
+Facebook
+
+</a>
+  </div>
+
+</div>
+
+<hr>
+
+<p style="text-align:center;">
+© 2026 Jose C. Payumo Jr. Memorial High School
+</p>
+
+</footer>
+<script type="module">
+
+import { db } from "./firebase.js";
+
+import {
+  collection,
+  onSnapshot,
+  doc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+// Teachers
+onSnapshot(collection(db,"teachers"),(snapshot)=>{
+
+  document.getElementById("teacherCount").innerText =
+  snapshot.size;
+
+});
+
+// Students
+onSnapshot(collection(db,"students"),(snapshot)=>{
+
+  document.getElementById("studentCount").innerText =
+  snapshot.size;
+
+});
+
+// Facilities
+
+onSnapshot(collection(db,"facilities"),(snapshot)=>{
+
+  let html = "";
+
+  snapshot.forEach(doc=>{
+
+    let f = doc.data();
+
+    html += `
+      <div class="item"
+      onclick="viewFacility(
+      '${f.imageUrl || ""}',
+      '${f.name || ""}'
+      )"
+      style="cursor:pointer">
+
+        🏫 ${f.name}
+
+      </div>
+    `;
+  });
+
+  document.getElementById("facilities").innerHTML = html;
+
+});
+
+window.viewFacility = (image,name)=>{
+
+  document.getElementById("facilityTitle").innerText =
+  name;
+
+  document.getElementById("facilityImage").src =
+  image;
+
+  document.getElementById("facilityModal").style.display =
+  "block";
+
+};
+
+window.closeFacility = ()=>{
+
+  document.getElementById("facilityModal").style.display =
+  "none";
+
+};
+
+
+// Announcements
+
+onSnapshot(collection(db,"announcements"),(snapshot)=>{
+
+  let html = "";
+
+  snapshot.forEach(doc=>{
+
+    let a = doc.data();
+
+    html += `
+      <div class="item">
+
+        ${a.imageUrl ?
+        `<img src="${a.imageUrl}"
+        style="
+        width:100%;
+        max-height:250px;
+        object-fit:cover;
+        border-radius:10px;
+        margin-bottom:10px;
+        ">`
+        : ""}
+
+        <p>${a.text || ""}</p>
+
+      </div>
+    `;
+  });
+
+  document.getElementById("announcements").innerHTML =
+  html;
+
+});
+
+// Settings
+
+onSnapshot(doc(db,"settings","school"),(snap)=>{
+
+  if(!snap.exists()) return;
+
+  const data = snap.data();
+
+document.getElementById("contactInfo").innerText =
+data.contact || "No contact information";
+
+document.getElementById("facebookLink").href =
+data.facebook || "#";
+
+document.getElementById("schoolImage").src =
+data.schoolImage || "";
+
+document.getElementById("schoolLogo").src =
+data.logoImage || "";
+
+});
+
+</script>
+
+</body>
+</html>

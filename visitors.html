@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account</title>
+
+<style>
+body{
+  font-family:Arial;
+  background:#f4f6f9;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.box{
+  background:white;
+  padding:30px;
+  border-radius:10px;
+  width:320px;
+}
+
+input, select, button{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+  box-sizing:border-box;
+  border:1px solid #ccc;
+  border-radius:8px;
+}
+
+
+button{
+  background:#004aad;
+  color:white;
+  border:none;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#003080;
+}
+
+
+.pass-box{
+  position:relative;
+}
+
+.pass-box input{
+  padding-right:40px;
+}
+
+#eyeIcon{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+}
+
+#eyeOpen, #eyeClosed{
+  transition: all 0.25s ease;
+}
+
+.logo{
+  width:90px;
+  height:90px;
+  object-fit:cover;
+  border-radius:50%;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+  <div style="text-align:center; margin-bottom:15px;">
+  <img src="deped.png" class="logo" alt="School Logo">
+     
+  </div>
+
+  <h2>Create Account</h2>
+
+<input id="name" placeholder="Full Name">
+
+<input id="email" placeholder="Email">
+
+<div class="pass-box">
+
+  <input id="password" type="password" placeholder="Password">
+
+  <svg id="eyeIcon" onclick="togglePassword()"
+    width="24" height="24" viewBox="0 0 24 24"
+    fill="none"
+    class="eye">
+
+    <!-- OPEN EYE -->
+    <g id="eyeOpen" opacity="0">
+      <path d="M2 12S5.5 5 12 5s10 7 10 7-3.5 7-10 7S2 12 2 12Z"
+        stroke="#555" stroke-width="2"/>
+      <circle cx="12" cy="12" r="3"
+        stroke="#555" stroke-width="2"/>
+    </g>
+
+    <!-- CLOSED EYE (DEFAULT) -->
+    <g id="eyeClosed">
+      <path d="M3 3L21 21"
+        stroke="#555" stroke-width="2"/>
+      <path d="M2 12S5.5 5 12 5s10 7 10 7-3.5 7-10 7S2 12 2 12Z"
+        stroke="#555" stroke-width="2"/>
+    </g>
+
+  </svg>
+
+</div>
+
+<select id="role">
+  <option value="parent">Parent</option>
+  <option value="visitor">Visitor</option>
+</select>
+
+<button id="createBtn" onclick="register()">
+Create Account
+</button>
+<p style="text-align:center; margin-top:12px; font-size:13px; color:#555;">
+  Already have an account?
+  <a href="index.html" style="color:#004aad; font-weight:600;">
+    Sign in
+  </a>
+</p>
+</div>
+
+<script>
+  let isHidden = true;
+
+function togglePassword(){
+  const password = document.getElementById("password");
+  const openEye = document.getElementById("eyeOpen");
+  const closedEye = document.getElementById("eyeClosed");
+
+  isHidden = !isHidden;
+
+  password.type = isHidden ? "password" : "text";
+
+  if(isHidden){
+    openEye.style.opacity = "0";
+    closedEye.style.opacity = "1";
+  } else {
+    openEye.style.opacity = "1";
+    closedEye.style.opacity = "0";
+  }
+}
+</script>
+
+<script type="module">
+
+import { auth, db } from "./firebase.js";
+
+import { doc, getDoc, collection, addDoc } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import { createUserWithEmailAndPassword } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+async function loadLogo() {
+  const snap = await getDoc(doc(db, "settings", "school"));
+
+  if (snap.exists() && snap.data().Logoimage) {
+    document.querySelector(".logo").src = snap.data().Logoimage;
+  }
+}
+
+loadLogo();
+
+
+window.register = async () => {
+
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const role = document.getElementById("role").value;
+
+  try {
+
+    const user = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    await addDoc(collection(db, "users"), {
+      uid: user.user.uid,
+      name,
+      email,
+      role
+    });
+
+    alert("Account Created");
+
+alert("Account Created");
+
+setTimeout(() => {
+  window.location.href = "index.html";
+}, 1000);
+
+  } catch (e) {
+    alert(e.message);
+  }
+
+};
+
+</script>
+</body>
+</html>
